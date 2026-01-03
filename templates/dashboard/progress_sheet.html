@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Progress Sheets - Student Progress Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Progress Sheets</h1>
+        <div>
+            <a href="{% url 'add_progress_sheet' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm me-2">
+                <i class="fas fa-plus-circle fa-sm text-white-50"></i> Add Progress Entry
+            </a>
+            <a href="{% url 'add_exam' %}" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm me-2">
+                <i class="fas fa-file-alt fa-sm text-white-50"></i> Add Exam
+            </a>
+            <a href="{% url 'add_subject' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
+                <i class="fas fa-book fa-sm text-white-50"></i> Add Subject
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Filter Progress Sheets</h6>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <select class="form-select" name="exam_type">
+                        <option value="">All Exam Types</option>
+                        <option value="quarterly" {% if selected_exam_type == 'quarterly' %}selected{% endif %}>Quarterly</option>
+                        <option value="midterm" {% if selected_exam_type == 'midterm' %}selected{% endif %}>Midterm</option>
+                        <option value="model" {% if selected_exam_type == 'model' %}selected{% endif %}>Model</option>
+                        <option value="end_term" {% if selected_exam_type == 'end_term' %}selected{% endif %}>End-Term</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" name="sort_by">
+                        <option value="student__full_name" {% if sort_by == 'student__full_name' %}selected{% endif %}>Sort by Student Name</option>
+                        <option value="marks" {% if sort_by == 'marks' %}selected{% endif %}>Sort by Marks</option>
+                        <option value="exam__date" {% if sort_by == 'exam__date' %}selected{% endif %}>Sort by Exam Date</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+                <div class="col-md-2">
+                    <a href="{% url 'progress_sheet' %}" class="btn btn-secondary w-100">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Progress Sheets Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Progress Entries</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Exam</th>
+                            <th>Subject</th>
+                            <th>Marks</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for progress in progress_sheets %}
+                        <tr>
+                            <td>{{ progress.student.full_name }}</td>
+                            <td>{{ progress.exam.name }}</td>
+                            <td>{{ progress.subject.name }}</td>
+                            <td>{{ progress.marks }}</td>
+                            <td>{{ progress.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No progress sheets found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

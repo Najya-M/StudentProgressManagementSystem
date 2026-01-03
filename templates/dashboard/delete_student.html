@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Student - Student Progress Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Delete Student</h1>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-danger">Confirm Deletion</h6>
+                </div>
+                <div class="card-body">
+                    <p>Are you sure you want to delete the following student?</p>
+                    <div class="alert alert-warning">
+                        <strong>Student Name:</strong> {{ student.full_name }}<br>
+                        <strong>Email:</strong> {{ student.email }}<br>
+                        <strong>Roll Number:</strong> {{ student.roll_number }}<br>
+                        <strong>Class/Batch:</strong> {{ student.class_batch }}
+                    </div>
+                    <p class="text-danger"><strong>Warning:</strong> This action cannot be undone.</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-end">
+                            <a href="{% url 'student_list' %}" class="btn btn-secondary me-2">Cancel</a>
+                            <button type="submit" class="btn btn-danger">Delete Student</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

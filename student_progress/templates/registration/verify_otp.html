@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify OTP - Student Progress Management{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Verify OTP</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-center">Please check your email for the OTP code.</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="{{ form.otp.id_for_label }}" class="form-label">OTP</label>
+                            {{ form.otp }}
+                            {% if form.otp.errors %}
+                                <div class="text-danger">{{ form.otp.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Verify OTP</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p>Didn't receive the OTP?</p>
+                        <a href="{% url 'resend_otp' user_id=user_id %}" class="btn btn-link">Resend OTP</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

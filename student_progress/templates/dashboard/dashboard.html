@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Student Progress Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="container">
+            <h1>Dashboard</h1>
+            <p class="lead">Welcome to Student Progress Management System</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Students
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_students }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total Exams
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_exams }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-file-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Total Subjects
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_subjects }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-book fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Recent Activities
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ recent_progress|length }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-history fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Progress Updates</h6>
+                </div>
+                <div class="card-body">
+                    {% if recent_progress %}
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Exam</th>
+                                        <th>Subject</th>
+                                        <th>Marks</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for progress in recent_progress %}
+                                    <tr>
+                                        <td>{{ progress.student.full_name }}</td>
+                                        <td>{{ progress.exam.name }}</td>
+                                        <td>{{ progress.subject.name }}</td>
+                                        <td>{{ progress.marks }}</td>
+                                        <td>{{ progress.created_at|date:"M d, Y" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No recent progress updates available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="{% url 'student_list' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-users me-2"></i> Manage Students
+                        </a>
+                        <a href="{% url 'progress_sheet' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-chart-bar me-2"></i> View Progress Sheets
+                        </a>
+                        <a href="{% url 'ranking' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-medal me-2"></i> View Rankings
+                        </a>
+                        <a href="{% url 'add_student' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user-plus me-2"></i> Add New Student
+                        </a>
+                        <a href="{% url 'add_progress_sheet' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus-circle me-2"></i> Add Progress Entry
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

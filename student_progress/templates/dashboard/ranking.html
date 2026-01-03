@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Rankings - Student Progress Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Student Rankings</h1>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Filter by Exam Type</h6>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-6">
+                    <select class="form-select" name="exam_type">
+                        {% for exam_type in exam_types %}
+                        <option value="{{ exam_type }}" {% if selected_exam_type == exam_type %}selected{% endif %}>
+                            {{ exam_type|title }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+                <div class="col-md-4">
+                    <p class="mt-2">Showing rankings for: <strong>{{ selected_exam_type|title }}</strong></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rankings Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Student Rankings</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Student Name</th>
+                            <th>Roll Number</th>
+                            <th>Class/Batch</th>
+                            <th>Average Score</th>
+                            <th>Total Marks</th>
+                            <th>Subjects</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in students_with_scores %}
+                        <tr>
+                            <td><strong>{{ forloop.counter }}</strong></td>
+                            <td>{{ item.student.full_name }}</td>
+                            <td>{{ item.student.roll_number }}</td>
+                            <td>{{ item.student.class_batch }}</td>
+                            <td><strong>{{ item.avg_score|floatformat:2 }}</strong></td>
+                            <td>{{ item.total_marks }}</td>
+                            <td>{{ item.num_subjects }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No students found for the selected exam type.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

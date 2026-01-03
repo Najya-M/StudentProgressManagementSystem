@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Students - Student Progress Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Students</h1>
+        <a href="{% url 'add_student' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-user-plus fa-sm text-white-50"></i> Add New Student
+        </a>
+    </div>
+
+    <!-- Search and Filter Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Search & Filter</h6>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="search" placeholder="Search by name or roll number" 
+                           value="{{ search_query }}">
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" name="sort_by">
+                        <option value="full_name" {% if sort_by == 'full_name' %}selected{% endif %}>Sort by Name</option>
+                        <option value="roll_number" {% if sort_by == 'roll_number' %}selected{% endif %}>Sort by Roll Number</option>
+                        <option value="class_batch" {% if sort_by == 'class_batch' %}selected{% endif %}>Sort by Class/Batch</option>
+                        <option value="date_of_birth" {% if sort_by == 'date_of_birth' %}selected{% endif %}>Sort by Date of Birth</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Students Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Student List</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Roll Number</th>
+                            <th>Class/Batch</th>
+                            <th>Date of Birth</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ student.full_name }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>{{ student.roll_number }}</td>
+                            <td>{{ student.class_batch }}</td>
+                            <td>{{ student.date_of_birth }}</td>
+                            <td>
+                                <a href="{% url 'edit_student' student.id %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a href="{% url 'delete_student' student.id %}" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No students found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
